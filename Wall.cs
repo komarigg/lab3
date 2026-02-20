@@ -10,12 +10,12 @@ namespace BattleCity
 
         public override void Update()
         {
-            /* Стены не двигаются */
+           
         }
 
         public override void TakeDamage(int damage)
         {
-            // КЛЮЧЕВОЙ МОМЕНТ: Если IsBreakable = false, игнорируем урон
+            
             if (IsBreakable)
             {
                 IsDestroyed = true;
@@ -29,7 +29,6 @@ namespace BattleCity
             {
                 Width = 32,
                 Height = 32,
-                // Визуально отличаем бетон от кирпича
                 Fill = IsBreakable ? Brushes.Brown : Brushes.DarkGray,
                 Stroke = Brushes.Black,
                 StrokeThickness = 1

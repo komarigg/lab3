@@ -4,14 +4,11 @@ using Avalonia.Media;
 
 namespace BattleCity
 {
-    // Класс базы (штаба), который нужно защищать
     public class Base : GameObject, IGameObject, IDamageable
     {
-        // Свойство здоровья (Lives из интерфейса IDamageable)
         public int Lives { get; set; } = 5; 
         public int MaxHealth { get; set; } = 5;
-
-        // Переопределяем метод получения урона из базового класса GameObject
+        
         public override void TakeDamage(int damage = 1)
         {
             if (IsDestroyed) return;
@@ -22,11 +19,10 @@ namespace BattleCity
             if (Lives <= 0)
             {
                 IsDestroyed = true;
-                IsActive = false; // База уничтожена — игра проиграна
+                IsActive = false; 
             }
         }
-
-        // Вспомогательный метод для восстановления
+        
         public void Repair(int amount = 1)
         {
             Lives += amount;
@@ -39,10 +35,8 @@ namespace BattleCity
         
         public override void Draw(Canvas canvas)
         {
-            // Если объект не активен и не разрушен, не рисуем
             if (!IsActive && !IsDestroyed) return;
             
-            // Рисуем основной квадрат базы
             var rect = new Avalonia.Controls.Shapes.Rectangle
             {
                 Width = Width,
@@ -56,7 +50,6 @@ namespace BattleCity
             Canvas.SetTop(rect, Y);
             canvas.Children.Add(rect);
             
-            // Рисуем букву "B" или "X" (если разрушена)
             var letter = new Avalonia.Controls.TextBlock
             {
                 Text = IsDestroyed ? "X" : "B",
@@ -68,7 +61,6 @@ namespace BattleCity
             Canvas.SetTop(letter, Y + Height / 2 - 10);
             canvas.Children.Add(letter);
             
-            // Если база жива, рисуем полоску здоровья (Health Bar)
             if (!IsDestroyed)
             {
                 var healthBar = new StackPanel
@@ -90,7 +82,6 @@ namespace BattleCity
                     healthBar.Children.Add(healthSegment);
                 }
                 
-                // Центрируем полоску здоровья над базой
                 Canvas.SetLeft(healthBar, X + Width / 2 - (MaxHealth * 3.5));
                 Canvas.SetTop(healthBar, Y - 15);
                 canvas.Children.Add(healthBar);

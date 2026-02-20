@@ -10,8 +10,7 @@ namespace BattleCity
         public Base? PlayerBase { get; set; } 
         public int Level { get; private set; } = 1;
         public string CurrentLevelName { get; private set; } = "Level 1";
-
-        // Добавлено свойство, которое запрашивал Game.cs
+        
         public int RemainingEnemiesToSpawn { get; set; } = 0; 
 
         public void LoadLevel(int level)
@@ -54,7 +53,6 @@ namespace BattleCity
 
         private void LoadDefaultLevel()
         {
-            // Границы карты
             for (int i = 0; i < 13; i++)
             {
                 Objects.Add(new Wall { X = i * 32, Y = 0, IsBreakable = false });
@@ -76,12 +74,11 @@ namespace BattleCity
             };
             Objects.Add(playerTank);
 
-            RemainingEnemiesToSpawn = 0; // В дефолтном уровне враги не прописаны
+            RemainingEnemiesToSpawn = 0; 
         }
 
         private void LoadFromLevelData(LevelData levelData)
         {
-            // Границы
             for (int i = 0; i < 13; i++)
             {
                 Objects.Add(new Wall { X = i * 32, Y = 0, IsBreakable = false });
@@ -93,8 +90,7 @@ namespace BattleCity
                 Objects.Add(new Wall { X = 0, Y = i * 32, IsBreakable = false });
                 Objects.Add(new Wall { X = 12 * 32, Y = i * 32, IsBreakable = false });
             }
-
-            // Безопасная инициализация базы
+            
             if (levelData != null)
             {
                 PlayerBase = new Base { X = levelData.BaseX * 32, Y = levelData.BaseY * 32, Width = 32, Height = 32 };
@@ -105,8 +101,7 @@ namespace BattleCity
                     Direction = 0
                 };
                 Objects.Add(playerTank);
-
-                // Загрузка врагов
+                
                 if (levelData.Enemies != null)
                 {
                     foreach (var enemy in levelData.Enemies)
@@ -117,11 +112,9 @@ namespace BattleCity
                         };
                         Objects.Add(enemyTank);
                     }
-                    // Если у тебя есть система спавна, это число должно быть больше нуля
                     RemainingEnemiesToSpawn = 0; 
                 }
-
-                // Загрузка стен
+                
                 if (levelData.Walls != null)
                 {
                     foreach (var wall in levelData.Walls)

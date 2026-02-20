@@ -46,14 +46,11 @@ namespace BattleCity
             if (IsGameOver || IsLevelComplete) return;
 
             if (playerShootCooldown > 0) playerShootCooldown--;
-
-            // 1. Обновляем все объекты (движение пуль и т.д.)
+            
             Map.Update();
-
-            // 2. Обновляем список врагов
+            
             Enemies = Map.Objects.OfType<Tank>().Where(t => !t.IsPlayer && t.IsActive).ToList();
-
-            // 3. Логика врагов
+            
             foreach (var enemy in Enemies)
             {
                 if (!enemy.IsDestroyed)
@@ -61,14 +58,11 @@ namespace BattleCity
                     EnemyAI.UpdateAI(enemy, Map);
                 }
             }
-
-            // 4. Обработка столкновений пуль (здесь база может получить IsDestroyed = true)
+            
             CollisionManager.HandleBulletCollisions(Map.Objects);
-
-            // 5. ВАЖНО: Сначала проверяем состояние игры (жива ли база и игрок)...
+            
             CheckGameState();
-
-            // 6. ...и только ПОТОМ удаляем "мертвые" объекты из списка
+            
             Map.Objects.RemoveAll(obj => !obj.IsActive || obj.IsDestroyed);
         }
 
@@ -92,24 +86,20 @@ namespace BattleCity
 
         private void CheckGameState()
         {
-            // Проверка базы: ищем её среди всех объектов до очистки
             var baseObj = Map.Objects.OfType<Base>().FirstOrDefault();
             
-            // Если база была уничтожена в этом кадре или вообще исчезла - проигрыш
             if (baseObj == null || baseObj.IsDestroyed)
             {
                 IsGameOver = true;
                 return;
             }
-
-            // Проверка игрока
+            
             if (Player == null || Player.IsDestroyed)
             {
                 IsGameOver = true;
                 return;
             }
-
-            // Проверка победы (если база жива, проверяем врагов)
+            
             if (Enemies.Count == 0 && Map.RemainingEnemiesToSpawn <= 0)
             {
                 IsLevelComplete = true;

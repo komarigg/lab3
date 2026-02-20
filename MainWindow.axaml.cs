@@ -67,8 +67,7 @@ namespace BattleCity
             
             RenderGame();
         }
-
-        // Вспомогательный метод для создания красивых кнопок
+        
         private Button CreateStyledButton(string text, IBrush background, IBrush border)
         {
             return new Button
@@ -182,14 +181,12 @@ namespace BattleCity
                     ShowGameOverMenu(game.IsLevelComplete);
                     return;
                 }
-
-                // КЛАССИЧЕСКОЕ ДВИЖЕНИЕ (else if исключает диагонали)
+                
                 if (pressedKeys.Contains(Key.Up)) game.HandlePlayerInput(0);
                 else if (pressedKeys.Contains(Key.Down)) game.HandlePlayerInput(1);
                 else if (pressedKeys.Contains(Key.Left)) game.HandlePlayerInput(2);
                 else if (pressedKeys.Contains(Key.Right)) game.HandlePlayerInput(3);
                 
-                // Стрельба независима от движения
                 if (pressedKeys.Contains(Key.Space)) game.HandlePlayerShoot();
 
                 game.Update();

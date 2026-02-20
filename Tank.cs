@@ -10,11 +10,10 @@ namespace BattleCity
     public class Tank : GameObject
     {
         public double Speed { get; set; }
-        public int Direction { get; set; } = 0; // 0: Up, 1: Down, 2: Left, 3: Right
+        public int Direction { get; set; } = 0; 
         public int Lives { get; set; } = 3;
         public bool IsPlayer { get; set; }
-
-        // Свойства для работы AI
+        
         public int AiActionTimer { get; set; } = 0;
         public int AiDirectionChangeCounter { get; set; } = 0;
         public int CurrentAiDirection { get; set; } = 0;
@@ -28,41 +27,31 @@ namespace BattleCity
             Height = 32;
             Lives = 3;
             
-            // Баланс скорости: игрок чуть маневреннее
             Speed = isPlayer ? 3.5 : 2.5;
         }
 
         public override void Update() { }
-
-        /// <summary>
-        /// Передвигает танк, если путь свободен.
-        /// </summary>
-        /// <param name="direction">Направление движения</param>
-        /// <param name="allObjects">Список всех объектов на карте для проверки коллизий</param>
+        
         public void Move(int direction, List<GameObject> allObjects)
         {
             Direction = direction;
             double nextX = X;
             double nextY = Y;
-
-            // Рассчитываем потенциальную новую позицию
+            
             switch (direction)
             {
-                case 0: nextY -= Speed; break; // Вверх
-                case 1: nextY += Speed; break; // Вниз
-                case 2: nextX -= Speed; break; // Влево
-                case 3: nextX += Speed; break; // Вправо
+                case 0: nextY -= Speed; break; 
+                case 1: nextY += Speed; break; 
+                case 2: nextX -= Speed; break; 
+                case 3: nextX += Speed; break; 
             }
-
-            // ПРОВЕРКА: Можно ли переместиться в эти координаты?
-            // Используем метод из CollisionManager для "предсказания" столкновения
+            
             if (CollisionManager.CanMoveTo(this, nextX, nextY, allObjects))
             {
                 X = nextX;
                 Y = nextY;
             }
-            // Если CanMoveTo вернул false, координаты X и Y остаются прежними, 
-            // и танк просто стоит на месте, упершись в препятствие.
+            
         }
 
         public Bullet Shoot()
@@ -114,7 +103,6 @@ namespace BattleCity
 
         private void DrawTankBody(Canvas canvas)
         {
-            // 1. Корпус танка
             var rect = new Rectangle
             {
                 Width = Width,
@@ -126,8 +114,7 @@ namespace BattleCity
             Canvas.SetLeft(rect, X);
             Canvas.SetTop(rect, Y);
             canvas.Children.Add(rect);
-
-            // 2. Башенка (Круглая часть в центре)
+            
             var turret = new Ellipse
             {
                 Width = 20,
@@ -139,8 +126,7 @@ namespace BattleCity
             Canvas.SetLeft(turret, X + 6);
             Canvas.SetTop(turret, Y + 6);
             canvas.Children.Add(turret);
-
-            // 3. Дуло танка
+            
             var gun = new Rectangle { Width = 4, Height = 12, Fill = Brushes.Gray };
             double gx = X + 14, gy = Y + 14;
 

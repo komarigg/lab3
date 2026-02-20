@@ -34,23 +34,15 @@ namespace BattleCity
 
         public static bool CanMoveTo(Tank tank, double newX, double newY, List<GameObject> allObjects)
         {
-            // 1. Проверка границ карты (используем полные визуальные границы для безопасности)
             if (newX < 0 || newX + tank.Width > MapSize || newY < 0 || newY + tank.Height > MapSize)
                 return false;
-
-            // 2. СОЗДАЕМ УМЕНЬШЕННЫЙ ХИТБОКС ДЛЯ ПРЕДСКАЗАНИЯ
-            // Мы берем X+2 и Y+2, а размер уменьшаем на 4 (по 2 пикселя с каждой стороны)
-            // Это в точности повторяет логику Bounds из GameObject.cs
+            
             Rect futureBounds = new Rect(newX + 2, newY + 2, tank.Width - 4, tank.Height - 4);
-
-            // 3. Проверка столкновений с объектами
+            
             foreach (var obj in allObjects)
             {
-                // Пропускаем самого себя, пули и разрушенные объекты
                 if (obj == tank || obj is Bullet || !obj.IsActive || obj.IsDestroyed) continue;
-
-                // Важно: obj.Bounds уже возвращает уменьшенный прямоугольник, 
-                // если это танк, или обычный, если это стена.
+                
                 if (futureBounds.Intersects(obj.Bounds))
                     return false; 
             }
